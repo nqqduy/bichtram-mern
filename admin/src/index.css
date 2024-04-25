@@ -1,3 +1,6 @@
+/* fonts */
+@import url("https://fonts.googleapis.com/css2?family=Cabin+Condensed:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&display=swap");
 *,
 ::after,
 ::before {
@@ -6,14 +9,11 @@
   padding: 0;
 }
 
-/* fonts */
-@import url("https://fonts.googleapis.com/css2?family=Cabin+Condensed:wght@400;700&display=swap");
-
 :root {
   /* color */
   --color-title: #425472;
   --color-parent: #52575c;
-  --primary-50-light: #3b3023;
+  --primary-50-light: #4d4d4d;
   --primary-50: #0068ff;
 
   --grey-500: #627d98;
@@ -348,7 +348,7 @@ table th {
 }
 
 .loading-center {
-  margin: 0 auto;
+  margin: auto auto;
 }
 
 .loading {
@@ -361,7 +361,10 @@ table th {
 }
 
 .logo {
-  width: 93px;
+  width: 8em;
+  height: 5rem;
+  font-size: 20px;
+  filter: invert(100%);
 }
 
 input:focus {

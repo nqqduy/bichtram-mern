@@ -54,6 +54,7 @@ const Wrapper = styled.div`
     width: 100%;
     padding: 1rem;
     font-size: 16px;
+    margin-top: 3rem;
   }
 
   input {

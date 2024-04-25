@@ -3,16 +3,21 @@ import FormRow from "../../components/FormRow/FormRow.jsx";
 import Logo from "../../components/Logo/Logo.jsx";
 import Wrapper from "./style.js";
 import { AiOutlineMail } from "react-icons/ai";
-import { BiCopyright } from "react-icons/bi";
 import { RiLockPasswordLine } from "react-icons/ri";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { ROUTE } from "../../constants/route.js";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 function Login() {
-  const initialValues = {
-    email: "",
-    workspace: "",
-    password: "",
-  };
+  const navigate = useNavigate();
+  const currentUser = useSelector((state) => state.user.currentUser);
+  console.log(currentUser);
+  useEffect(() => {
+    if (currentUser) {
+      navigate(ROUTE.INDEX);
+    }
+  }, [currentUser, navigate]);
 
   const onSubmit = async (currentUser) => {
     try {
@@ -30,6 +35,12 @@ function Login() {
       //     showConfirmButton: true,
       //   });
     }
+  };
+
+  const initialValues = {
+    email: "",
+    workspace: "",
+    password: "",
   };
   return (
     <Wrapper className="full-page">
