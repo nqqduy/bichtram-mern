@@ -1,11 +1,8 @@
-import { MongoClient } from 'mongodb';
-import { config } from 'dotenv'
-
-config()
+require("dotenv").config();
+const { MongoClient } = require("mongodb");
 // MongoDB connection URL
 const pass = process.env.PASS;
 const url = `mongodb+srv://lightwing2208:${pass}@database.t4myp8j.mongodb.net/`;
-
 
 class DatabaseService {
   constructor() {
@@ -29,5 +26,6 @@ class DatabaseService {
     return this.db.collection("cart");
   }
 }
-const databaseProject = new DatabaseService()
-export default databaseProject;
+const databaseProject = new DatabaseService();
+
+module.exports = databaseProject;
