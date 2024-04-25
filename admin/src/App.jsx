@@ -42,7 +42,7 @@ function App() {
                 path={ROUTE.CUSTOMER}
                 element={
                   <Suspense fallback={<Loading center />}>
-                    <Order />
+                    <Customer />
                   </Suspense>
                 }
               ></Route>

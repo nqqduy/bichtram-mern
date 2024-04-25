@@ -3,7 +3,12 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { BiPlusCircle } from "react-icons/bi";
 import Wrapper from "./style";
 import { Button, FormRow, Loading } from "../../../../components";
-// import { validationCategory } from "../../../schema";
+// import { valida{ useRef }tionCategory } from "../../../schema";
+import React, { useRef, useState } from "react";
+
+const defaultProduct =
+  "https://curie.pnnl.gov/sites/default/files/default_images/default-image_0.jpeg";
+const numDetailImages = 3;
 
 export default function AddAndEditProductPopup({
   isEditing,
@@ -13,6 +18,44 @@ export default function AddAndEditProductPopup({
   title,
   isLoading,
 }) {
+  const uploadFileRef = useRef(null);
+  const uploadFileDetailRefs = Array(numDetailImages)
+    .fill(null)
+    .map(() => React.createRef(null));
+  console.log(uploadFileDetailRefs);
+  const [thumbnail, setThumbnail] = useState(defaultProduct);
+  const [images, setImages] = useState([
+    defaultProduct,
+    defaultProduct,
+    defaultProduct,
+  ]);
+
+  const handChangeUploadThumbnail = (event) => {
+    const file = event.target.files[0];
+    if (file && file.type.startsWith("image/")) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const base64String = e.target.result;
+        setThumbnail(base64String);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handChangeUploadDetail = (event, index) => {
+    const file = event.target.files[0];
+    if (file && file.type.startsWith("image/")) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const base64String = e.target.result;
+        let newImages = [...images];
+        newImages[index] = base64String;
+        setImages(newImages);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   return (
     <Wrapper>
       <Formik
@@ -26,6 +69,21 @@ export default function AddAndEditProductPopup({
               <h5>{title}</h5>
               <hr />
               <div className="form-center-product">
+                <p>Product Thumbnail</p>
+                <img
+                  src={thumbnail}
+                  className="imagePreview"
+                  onClick={() => uploadFileRef.current.click()}
+                />
+                <input
+                  ref={uploadFileRef}
+                  id="uploadFile"
+                  type="file"
+                  name="image"
+                  onChange={handChangeUploadThumbnail}
+                  accept="image/*"
+                />
+
                 <FastField
                   name="name"
                   component={FormRow}
@@ -54,6 +112,32 @@ export default function AddAndEditProductPopup({
                   labelText="Product brand"
                   placeholder="Product brand"
                 />
+                <div className="product-detail">
+                  <p>Product Detail</p>
+                  <div className="product-detail-images">
+                    {images.map((_, index) => {
+                      return (
+                        <div key={index}>
+                          <img
+                            src={images[index]}
+                            className="imagePreview"
+                            onClick={() =>
+                              uploadFileDetailRefs[index].current.click()
+                            }
+                          />
+                          <input
+                            ref={uploadFileDetailRefs[index]}
+                            id="uploadFile"
+                            type="file"
+                            name="image"
+                            onChange={(e) => handChangeUploadDetail(e, index)}
+                            accept="image/*"
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
                 <div className="btn-container-product">
                   {isLoading ? (
                     <Loading center />

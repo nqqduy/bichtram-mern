@@ -88,6 +88,7 @@ const Wrapper = styled.nav`
     text-align: center;
     visibility: hidden;
     border-radius: var(--borderRadius);
+    width: auto;
   }
 
   .show-dropdown {

@@ -53,8 +53,8 @@ function Login() {
           return (
             <Form className="form">
               <Logo />
-              <h3>đăng nhập</h3>
-              <p>Chào mừng đến Shine-Aura</p>
+              <h3>Login</h3>
+              <p>Welcome to Shine-Aura</p>
               <FastField
                 name="email"
                 component={FormRow}
@@ -72,7 +72,7 @@ function Login() {
                 icon={<RiLockPasswordLine className="icon" size={20} />}
               />
               <button type="submit" className="btn-custom">
-                Đăng nhập
+                Login
               </button>
             </Form>
           );

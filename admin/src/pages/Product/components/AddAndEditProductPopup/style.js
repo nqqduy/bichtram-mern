@@ -1,6 +1,28 @@
 import styled from "styled-components";
 
 const Wrapper = styled.section`
+  p {
+    margin-bottom: 0px;
+  }
+  .product-detail-images {
+    display: flex;
+    gap: 30px;
+  }
+  .imagePreview {
+    width: 100px;
+    height: 100px;
+    background-position: center center;
+    background-size: cover;
+    -webkit-box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.3);
+    display: inline-block;
+    border: dashed 1px gray;
+    cursor: pointer;
+  }
+
+  #uploadFile {
+    display: none;
+  }
+
   // bóng mờ
   position: fixed;
   top: 0;

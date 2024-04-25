@@ -72,9 +72,8 @@ const Customer = () => {
 
   return (
     <Wrapper>
-      <h4>Order Management</h4>
+      <h4>Customer Management</h4>
       <hr />
-      {/* <SearchProCate name="doanh mục" state={state} setState={setState} /> */}
 
       <Table
         columns={columns}

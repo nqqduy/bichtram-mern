@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { BiLogOut } from "react-icons/bi";
-import { FaAlignLeft, FaCaretDown, FaRegUserCircle } from "react-icons/fa";
+import { FaAlignLeft, FaCaretDown } from "react-icons/fa";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
