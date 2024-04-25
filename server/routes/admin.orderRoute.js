@@ -3,9 +3,10 @@ const Order = require("../models/Order");
 const router = express.Router();
 
 // BASE URL : /admin/order
+// req : query : pageSize, pageSize
 router.get("/", async (req, res) => {
   const pageSize = req.query?.pageSize || 20;
-  const pageIndex = req.query?.pageNumber || 1;
+  const pageIndex = req.query?.pageSize || 1;
   const offset = (pageIndex - 1) * pageSize;
   try {
     const orders = await Order.find().skip(offset).limit(pageSize);

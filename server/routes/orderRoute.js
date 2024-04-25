@@ -7,6 +7,7 @@ const { default: mongoose } = require("mongoose");
 
 // BASE URL : Order
 //body : products : [{productId, quantity, productPrice}]
+//header : token
 router.post("/", authMiddleware, async (req, res) => {
   const { userId } = req.user;
   const { products } = req.body;

@@ -28,7 +28,7 @@ app.use(express.json());
 app.get("/products", async (req, res) => {
   const searchTerm = req.query.term;
   const pageSize = req.query?.pageSize || 20;
-  const pageIndex = req.query?.pageNumber || 1;
+  const pageIndex = req.query?.pageSize || 1;
   const offset = (pageIndex - 1) * pageSize;
 
   try {
