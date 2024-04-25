@@ -38,7 +38,8 @@ app.get("/products", async (req, res) => {
     }
 
     const products = await Product.find(query).skip(offset).limit(pageSize);
-    res.json(products);
+    const totalItems = await Product.countDocuments(query);
+    res.json({ data: products, totalItems });
   } catch (error) {
     console.error(`Error: ${error}`);
     res.status(500).send("An error occurred while trying to fetch products.");
@@ -63,6 +64,10 @@ app.delete("/users", authenticateToken, userRoute);
 app.use("/product", productRoute);
 app.use("/products", adminProduct);
 
+//order
+app.use("/order", require("./routes/orderRoute"));
+app.use("/admin/order", require("./routes/admin.orderRoute"));
+//
 app.use("/", sendtokenRoute);
 app.use("/", resetpassRoute);
 

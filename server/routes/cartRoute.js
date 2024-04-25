@@ -6,7 +6,7 @@ const authMiddleware = require("../middleware/auth");
 
 router.get("/", authMiddleware, async (req, res) => {
   const { userId } = req.user;
-
+  console.log("go here");
   try {
     const cart = await CartModel.findOne({ userId });
     if (!cart) {
@@ -66,13 +66,11 @@ router.post("/", authMiddleware, async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: "Internal Server Error",
-        error: error.toString(),
-      });
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+      error: error.toString(),
+    });
   }
 });
 

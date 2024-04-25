@@ -16,7 +16,15 @@ router.get("/", async (req, res) => {
 // POST a new product
 router.post("/", async (req, res) => {
   try {
-    const newProduct = new Product(req.body);
+    const body = {
+      productUrl: req.body?.productUrl ?? null,
+      price: req.body.price,
+      product_type: req.body.product_type,
+      brands: req.body.brands,
+      product_name: req.body.product_name,
+    };
+
+    const newProduct = new Product(body);
     const savedProduct = await newProduct.save();
     res.status(201).json(savedProduct);
   } catch (error) {
@@ -25,7 +33,7 @@ router.post("/", async (req, res) => {
       res.status(400).json({ error: error.message });
     } else {
       console.error("Error adding product:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ error: "Internal Server Error", message: error });
     }
   }
 });

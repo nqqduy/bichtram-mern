@@ -5,23 +5,19 @@ const productSchema = new mongoose.Schema({
   productUrl: {
     type: String,
     required: false,
-    unique: true,
-    trim: true,
   },
   product_id: {
     type: String,
     required: false,
-    index: true,
+    // index: true,
   },
   product_name: {
     type: String,
     required: true,
-    trim: true,
   },
   product_type: {
     type: String,
     required: true,
-    trim: true,
   },
   price: {
     type: Number,
@@ -34,18 +30,13 @@ const productSchema = new mongoose.Schema({
       maxlength: 2000,
     },
   ],
-  // variants: [
-  //   {
-  //   },
-  // ],
   brands: {
     type: String,
     required: true,
-    trim: true,
   },
+  variants: [],
   tabData: {
     type: Object,
-    required: false,
   },
 });
 
