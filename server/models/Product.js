@@ -2,15 +2,15 @@ const mongoose = require("mongoose");
 
 const productSchema = new mongoose.Schema({
   // _id: mongoose.Schema.Types.ObjectId,
-  productUrl: {
-    type: String,
-    required: false,
-  },
-  product_id: {
-    type: String,
-    required: false,
-    // index: true,
-  },
+  //   productUrl: {
+  //     type: String,
+  //     required: false,
+  //   },
+  //   product_id: {
+  //     type: String,
+  //     required: false,
+  //     // index: true,
+  //   },
   product_name: {
     type: String,
     required: true,
@@ -34,7 +34,13 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  variants: [],
+  variants: [
+    {
+      type: String,
+      required: false,
+      maxlength: 2000,
+    },
+  ],
   tabData: {
     type: Object,
   },

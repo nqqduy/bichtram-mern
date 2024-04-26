@@ -37,7 +37,6 @@ router.get("/products/brand/:brand", async (req, res) => {
 
 router.get("/products/type/:type", async (req, res) => {
   const { type } = req.params;
-  console.log(type);
   try {
     const products = await Product.find({ product_type: type });
     if (!products || products.length === 0)

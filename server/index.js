@@ -10,6 +10,8 @@ const forgotRoute = require("./routes/forgotRoute");
 const sendtokenRoute = require("./routes/sendtokenRoute");
 const resetpassRoute = require("./routes/resetpassRoute");
 const cartRoute = require("./routes/cartRoute");
+const fileRoute = require("./routes/fileRoute");
+const adminAuthRoute = require("./routes/adminAuthRoute");
 const authenticateToken = require("./middleware/auth");
 const Product = require("./models/Product");
 const adminProduct = require("./routes/adminRoutes");
@@ -19,7 +21,7 @@ const mongoose = require("mongoose");
 const app = express();
 const PORT = 3000;
 const pass = process.env.PASS;
-const url = `mongodb+srv://lightwing2208:${pass}@database.t4myp8j.mongodb.net/`;
+const url = `mongodb+srv://lightwing2208:${pass}@database.t4myp8j.mongodb.net/dataBase`;
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -53,7 +55,7 @@ app.get("/verification", (req, res) => {
 //auth
 app.post("/signup", require("./routes/signupRoute"));
 app.post("/signin", signinRoute);
-
+app.use("/admin/auth", adminAuthRoute);
 //user
 app.get("/users", authenticateToken, userRoute);
 app.post("/forgot-password", forgotRoute);
@@ -73,6 +75,9 @@ app.use("/", resetpassRoute);
 
 //cart
 app.use("/cart", cartRoute);
+
+// file
+app.use("/file", fileRoute);
 
 // databaseProject.run();
 

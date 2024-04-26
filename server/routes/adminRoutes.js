@@ -22,6 +22,8 @@ router.post("/", async (req, res) => {
       product_type: req.body.product_type,
       brands: req.body.brands,
       product_name: req.body.product_name,
+      variants: req.body.variants,
+      tabData: req.body.tabData,
     };
 
     const newProduct = new Product(body);

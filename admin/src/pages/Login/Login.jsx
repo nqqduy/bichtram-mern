@@ -8,11 +8,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { ROUTE } from "../../constants/route.js";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { validationLogin } from "../../schema/index.js";
+import { loginUser } from "../../app/user/userSlice.js";
+import Swal from "sweetalert2";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 function Login() {
   const navigate = useNavigate();
   const currentUser = useSelector((state) => state.user.currentUser);
-  console.log(currentUser);
+  const dispatch = useDispatch();
+
   useEffect(() => {
     if (currentUser) {
       navigate(ROUTE.INDEX);
@@ -21,25 +26,19 @@ function Login() {
 
   const onSubmit = async (currentUser) => {
     try {
-      //   const actionResult = await dispatch(loginUser(currentUser));
-      //   unwrapResult(actionResult);
-      //   Swal.fire({
-      //     icon: "success",
-      //     title: "Đăng nhập thành công",
-      //     showConfirmButton: true,
-      //   });
+      const actionResult = await dispatch(loginUser(currentUser));
+      unwrapResult(actionResult);
     } catch (error) {
-      //   Swal.fire({
-      //     icon: "warning",
-      //     title: error.message,
-      //     showConfirmButton: true,
-      //   });
+      Swal.fire({
+        icon: "warning",
+        title: error.message,
+        showConfirmButton: true,
+      });
     }
   };
 
   const initialValues = {
     email: "",
-    workspace: "",
     password: "",
   };
   return (
@@ -47,7 +46,7 @@ function Login() {
       <Formik
         initialValues={initialValues}
         onSubmit={onSubmit}
-        // validationSchema={validationLogin}
+        validationSchema={validationLogin}
       >
         {(formikProps) => {
           return (
