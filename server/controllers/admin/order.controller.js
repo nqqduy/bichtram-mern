@@ -3,25 +3,18 @@ const OrderAdminService = require("../../services/admin/order.service");
 class OrderController {
   static async getAllOrder(req, res, next) {
     try {
-      const products = await OrderAdminService.getAllOrder();
-      res.status(200).json({ products });
-    } catch (error) {
-      next(error);
-    }
-  }
-  static async getOneOrder(req, res) {
-    try {
-      const product = await OrderAdminService.getOneOrder();
-      return res.status(201).json({ message: "Successfully", product });
+      const query = req.query;
+      const orders = await OrderAdminService.getAllOrder(query);
+      res.status(200).json({ orders });
     } catch (error) {
       next(error);
     }
   }
 
-  static async updateOrder(req, res) {
-    const productId = req.params.productId;
+  static async deleteOrder(req, res) {
+    const orderId = req.params.orderId;
     try {
-      await OrderAdminService.updateOrder(productId);
+      await OrderAdminService.deleteOrder(orderId);
       res.status(204).json({ data: 1 });
     } catch (error) {
       next(error);

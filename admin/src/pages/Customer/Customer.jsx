@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import Wrapper from "../../assets/styles/management";
 import { Space, Table, Tag } from "antd";
 import { deleteUser, getAllCustomer } from "../../app/customer/customerSlice";
+import Search from "../../components/Search/Search";
 
 const Customer = () => {
   const columns = [
@@ -44,7 +45,7 @@ const Customer = () => {
       align: "center",
     },
   ];
-
+  const [search, setSearch] = useState("");
   const listCustomer = useSelector((state) => state.customer.listCustomer);
   const [tableParams, setTableParams] = useState({
     pagination: {
@@ -57,7 +58,7 @@ const Customer = () => {
   useEffect(() => {
     const fetchCustomer = async () => {
       try {
-        const actionResult = await dispatch(getAllCustomer());
+        const actionResult = await dispatch(getAllCustomer({ q: search }));
         unwrapResult(actionResult);
       } catch (error) {
         Swal.fire({
@@ -69,7 +70,7 @@ const Customer = () => {
     };
     fetchCustomer();
   }, [
-    dispatch,
+    search,
     tableParams.pagination?.current,
     tableParams.pagination?.pageSize,
   ]);
@@ -112,6 +113,11 @@ const Customer = () => {
     <Wrapper>
       <h4>Customer Management</h4>
       <hr />
+      <Search
+        state={search}
+        setState={setSearch}
+        placeholder="Search name user"
+      />
       <Table
         columns={columns}
         rowKey={(record) => record._id}

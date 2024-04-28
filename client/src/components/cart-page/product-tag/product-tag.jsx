@@ -76,7 +76,6 @@ const ProductTag = ({
       );
 
       if (response.data.success) {
-        console.log("Product deleted from cart successfully");
         onDelete(product_id);
       } else {
         console.error(response.data.message);

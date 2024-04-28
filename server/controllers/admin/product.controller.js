@@ -3,7 +3,8 @@ const ProductAdminService = require("../../services/admin/product.service");
 class ProductController {
   static async getAllProduct(req, res, next) {
     try {
-      const products = await ProductAdminService.getAllProduct();
+      const query = req.query;
+      const products = await ProductAdminService.getAllProduct(query);
       res.status(200).json({ products });
     } catch (error) {
       next(error);
@@ -24,7 +25,7 @@ class ProductController {
       await ProductAdminService.deleteProduct(productId);
       res.status(204).json({ data: 1 });
     } catch (error) {
-      next(error);
+      res.status(400).json({ message: error.message });
     }
   }
 }

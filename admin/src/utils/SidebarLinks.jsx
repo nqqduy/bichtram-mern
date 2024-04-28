@@ -5,11 +5,11 @@ import { LuUsers } from "react-icons/lu";
 import { ROUTE } from "../constants/route";
 
 const SidebarLinks = [
-  {
-    text: "Dashboard",
-    path: ROUTE.INDEX,
-    icon: <BiGridAlt />,
-  },
+  //   {
+  //     text: "Dashboard",
+  //     path: ROUTE.INDEX,
+  //     icon: <BiGridAlt />,
+  //   },
   {
     text: "Orders",
     path: ROUTE.ORDER,

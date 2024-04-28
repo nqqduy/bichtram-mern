@@ -43,7 +43,6 @@ export const productApi = {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log(data);
       return data;
     } catch (error) {
       if (error.response) throw new Error(error.response.data.message);

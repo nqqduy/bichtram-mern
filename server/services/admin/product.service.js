@@ -1,4 +1,5 @@
 const Product = require("../../models/Product");
+const Order = require("../../models/Order");
 
 class ProductService {
   static async createProduct(data) {
@@ -17,11 +18,23 @@ class ProductService {
   }
 
   static async deleteProduct(productId) {
+    const order = await Order.findOne({ "products.id": productId });
+    if (order) {
+      throw new Error("This product is in the order, so it cannot be deleted");
+    }
     await Product.findByIdAndDelete(productId);
   }
 
-  static async getAllProduct() {
-    return await Product.find().lean();
+  static async getAllProduct(query) {
+    const { q } = query;
+    const filter = {};
+
+    if (q) {
+      const regexPattern = new RegExp(`.*${q}.*`, "i");
+      filter.product_name = { $regex: regexPattern };
+    }
+
+    return await Product.find(filter).lean();
   }
 }
 

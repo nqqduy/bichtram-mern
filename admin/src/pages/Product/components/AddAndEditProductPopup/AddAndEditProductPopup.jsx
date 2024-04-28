@@ -18,6 +18,7 @@ import {
 import Swal from "sweetalert2";
 import { useDispatch } from "react-redux";
 import { unwrapResult } from "@reduxjs/toolkit";
+import { validationProduct } from "../../../../schema";
 
 const defaultProduct =
   "https://curie.pnnl.gov/sites/default/files/default_images/default-image_0.jpeg";
@@ -127,7 +128,7 @@ export default function AddAndEditProductPopup({
       <Formik
         initialValues={initialValues}
         onSubmit={handleSubmit}
-        // validationSchema={validationCategory}
+        validationSchema={validationProduct}
       >
         {(formikProps) => {
           return (
@@ -256,13 +257,13 @@ export default function AddAndEditProductPopup({
                       <Button
                         type="submit"
                         classname="btn-custom  btn-icon"
-                        text={isEditing ? "Cập Nhật" : "Thêm"}
+                        text={isEditing ? "Cập Nhật" : "Add"}
                         icon={<BiPlusCircle className="front-icon" />}
                       />
                       <Button
                         type="button"
                         classname="btn-custom  btn-icon btn-delete"
-                        text="Hủy"
+                        text="Cancel"
                         icon={<AiOutlineDelete className="front-icon" />}
                         handleFunction={setShowPopup}
                       />

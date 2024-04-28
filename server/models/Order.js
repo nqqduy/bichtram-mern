@@ -15,12 +15,19 @@ const orderSchema = new mongoose.Schema({
   recipientInformation: { type: Object },
   totalPrice: {
     type: Number,
-    required: false,
+    required: true,
   },
-
+  orderNumber: {
+    type: String,
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+    required: true,
+  },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: "users",
     required: true,
   },
 });

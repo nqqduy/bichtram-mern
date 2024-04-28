@@ -3,7 +3,8 @@ const UserAdminService = require("../../services/admin/user.service");
 class UserController {
   static async getListUser(req, res) {
     try {
-      const users = await UserAdminService.getListUser();
+      const query = req.query;
+      const users = await UserAdminService.getListUser(query);
       return res.status(200).json({ users });
     } catch (error) {
       res.json(500).json({ message: "Something error" });

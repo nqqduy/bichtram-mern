@@ -34,7 +34,7 @@ function App() {
                 index
                 element={
                   <Suspense fallback={<Loading center />}>
-                    <Dashboard />
+                    <Order />
                   </Suspense>
                 }
               ></Route>
@@ -47,6 +47,7 @@ function App() {
                 }
               ></Route>
               <Route
+                index
                 path={ROUTE.ORDER}
                 element={
                   <Suspense fallback={<Loading center />}>

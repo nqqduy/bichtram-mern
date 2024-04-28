@@ -57,9 +57,9 @@ app.get("/verification", (req, res) => {
 
 // ADMIN
 app.use("/admin/auth", adminAuthRoute);
-app.use("/admin/users", userAdminRoute);
-app.use("/admin/products", productAdminRoute);
-app.use("/admin/orders", orderAdminRoute);
+app.use("/admin/users", authenticateToken, userAdminRoute);
+app.use("/admin/products", authenticateToken, productAdminRoute);
+app.use("/admin/orders", authenticateToken, orderAdminRoute);
 
 //auth
 app.post("/signup", require("./routes/signupRoute"));

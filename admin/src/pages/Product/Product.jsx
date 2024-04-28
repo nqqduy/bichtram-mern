@@ -13,6 +13,7 @@ import {
   getAllProduct,
 } from "../../app/product/productSlice";
 import AddAndEditProductPopup from "./components/AddAndEditProductPopup/AddAndEditProductPopup";
+import Search from "../../components/Search/Search";
 
 const Product = () => {
   const columns = [
@@ -74,6 +75,7 @@ const Product = () => {
   const listProduct = useSelector((state) => state.product.listProduct);
   const [showPopup, setShowPopup] = useState(false);
   const dispatch = useDispatch();
+  const [search, setSearch] = useState("");
 
   const [tableParams, setTableParams] = useState({
     pagination: {
@@ -85,7 +87,7 @@ const Product = () => {
   useEffect(() => {
     async function fetchProducts() {
       try {
-        const actionResult = await dispatch(getAllProduct());
+        const actionResult = await dispatch(getAllProduct({ q: search }));
         unwrapResult(actionResult);
       } catch (error) {
         Swal.fire({
@@ -96,7 +98,11 @@ const Product = () => {
       }
     }
     fetchProducts();
-  }, [tableParams.pagination?.current, tableParams.pagination?.pageSize]);
+  }, [
+    search,
+    tableParams.pagination?.current,
+    tableParams.pagination?.pageSize,
+  ]);
 
   function handleDeleteProduct(_id) {
     Swal.fire({
@@ -143,7 +149,12 @@ const Product = () => {
     <Wrapper>
       <h4>Product Management</h4>
       <hr />
-      {/* <SearchProCate name="doanh mục" state={state} setState={setState} /> */}
+      <Search
+        state={search}
+        setState={setSearch}
+        placeholder="Search product name"
+      />
+
       <div className="btn-container">
         <Button
           classname="btn-custom btn-icon"

@@ -1,89 +1,170 @@
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useEffect, useState } from "react";
-import { BiPlusCircle } from "react-icons/bi";
-import { GrCaretNext, GrCaretPrevious } from "react-icons/gr";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import Wrapper from "../../assets/styles/management";
-import { Button, Loading } from "../../components";
-// import { PopupCategory, SearchProCate } from "./components";
-import { Space, Table, Tag } from "antd";
-const { Column, ColumnGroup } = Table;
+import { Table, Tag } from "antd";
+import { deleteOrder, getAllOrder } from "../../app/order/orderSlice";
+import OrderDetail from "./components/OrderDetail/OrderDetail";
+import Search from "../../components/Search/Search";
 
-const columns = [
-  {
-    title: "No.",
-    dataIndex: "No",
-    width: "10%",
-  },
-  {
-    title: "Name",
-    dataIndex: "name",
-    // render: (name) => `${name.first} ${name.last}`,
-    width: "20%",
-  },
-  {
-    title: "Type",
-    dataIndex: "type",
-    // filters: [
-    //   { text: "Male", value: "male" },
-    //   { text: "Female", value: "female" },
-    // ],
-    width: "20%",
-  },
-  {
-    title: "Brands",
-    dataIndex: "Brands",
-  },
-  {
-    title: "Created On",
-    data: "createdAt",
-    sorter: true,
-  },
-];
 const Order = () => {
-  const [data, setData] = useState();
+  const [showPopup, setShowPopup] = useState();
+  const [currentOrder, setCurrentOrder] = useState(null);
+  const [search, setSearch] = useState("");
+
+  const columns = [
+    {
+      title: "No.",
+      dataIndex: "No",
+      width: "10%",
+      align: "center",
+    },
+    {
+      title: "Order number",
+      dataIndex: "orderNumber",
+      // render: (name) => `${name.first} ${name.last}`,
+      width: "20%",
+      align: "center",
+    },
+    {
+      title: "Recipient Information",
+      dataIndex: "recipientInformation",
+      render: (r) => `${r?.recipientName} - ${r.recipientPhone}`,
+      width: "20%",
+      align: "center",
+    },
+    {
+      title: "Total price",
+      dataIndex: "totalPrice",
+      width: "20%",
+      align: "center",
+    },
+    {
+      title: "Created On",
+      dataIndex: "createdAt",
+      render: (createdAt) => `${new Date(createdAt).toLocaleString()}`,
+
+      width: "20%",
+      align: "center",
+    },
+    {
+      title: "Action",
+      dataIndex: "_id",
+      width: "10%",
+      render: (_id, data) => {
+        return (
+          <div style={{ display: "flex" }}>
+            <Tag
+              color={"green"}
+              onClick={() => handlePopup(data)}
+              className="cursor-pointer"
+            >
+              DETAIL
+            </Tag>
+            <Tag
+              color={"red"}
+              onClick={() => handleDeleteOrder(_id)}
+              className="cursor-pointer"
+            >
+              DELETE
+            </Tag>
+          </div>
+        );
+      },
+      align: "center",
+    },
+  ];
+  const listOrder = useSelector((state) => state.order.listOrder);
+  const dispatch = useDispatch();
+
+  const handlePopup = (data) => {
+    setCurrentOrder(data);
+    setShowPopup(!showPopup);
+  };
+
   const [tableParams, setTableParams] = useState({
     pagination: {
       current: 1,
-      pageSize: 10,
+      pageSize: 5,
     },
   });
-  const getRandomuserParams = (params) => ({
-    results: params.pagination?.pageSize,
-    page: params.pagination?.current,
-    ...params,
-  });
-  //  useEffect(() => {
-  //     fetchData();
-  //   }, [tableParams.pagination?.current, tableParams.pagination?.pageSize]);
+
+  useEffect(() => {
+    async function fetchOrders() {
+      try {
+        const actionResult = await dispatch(getAllOrder({ q: search }));
+        unwrapResult(actionResult);
+      } catch (error) {
+        Swal.fire({
+          icon: "warning",
+          title: error.message,
+          showConfirmButton: true,
+        });
+      }
+    }
+    fetchOrders();
+  }, [
+    search,
+    tableParams.pagination?.current,
+    tableParams.pagination?.pageSize,
+  ]);
+
   const handleTableChange = (pagination, filters, sorter) => {
     setTableParams({
       pagination,
       filters,
       ...sorter,
     });
-
-    // `dataSource` is useless since `pageSize` changed
-    if (pagination.pageSize !== tableParams.pagination?.pageSize) {
-      setData([]);
-    }
   };
+
+  function handleDeleteOrder(_id) {
+    Swal.fire({
+      title: "Do you want to delete this order?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "OK",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const resultDelete = await dispatch(deleteOrder(_id));
+          unwrapResult(resultDelete);
+          const actionResult = await dispatch(getAllOrder());
+          unwrapResult(actionResult);
+        } catch (error) {
+          Swal.fire({
+            icon: "warning",
+            title: error.message,
+            showConfirmButton: true,
+          });
+        }
+      }
+    });
+  }
 
   return (
     <Wrapper>
       <h4>Order Management</h4>
       <hr />
-      {/* <SearchProCate name="doanh mục" state={state} setState={setState} /> */}
+      <Search
+        state={search}
+        setState={setSearch}
+        placeholder="Search order number"
+      />
 
       <Table
         columns={columns}
-        rowKey={(record) => record.login.uuid}
-        dataSource={data}
+        rowKey={(record) => record._id}
+        dataSource={listOrder}
         pagination={tableParams.pagination}
         // loading={loading}
         onChange={handleTableChange}
       />
+      {showPopup && (
+        <OrderDetail setShowPopup={setShowPopup} data={currentOrder} />
+      )}
     </Wrapper>
   );
 };

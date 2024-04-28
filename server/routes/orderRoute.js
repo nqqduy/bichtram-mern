@@ -5,10 +5,17 @@ const Product = require("../models/Product");
 const Order = require("../models/Order");
 const Cart = require("../models/cart");
 const { default: mongoose } = require("mongoose");
+const crypto = require("crypto");
 
 // BASE URL : Order
 //body : products : [{productId, quantity, productPrice}]
 //header : token
+function generateRandomNumber() {
+  const timestamp = new Date().getTime().toString();
+  const randomNumber = parseInt(timestamp.slice(-5)); // Lấy 5 ký tự cuối của timestamp
+  return randomNumber.toString().padStart(5, "0"); // Chắc chắn có 5 ký tự
+}
+
 router.post("/", authMiddleware, async (req, res) => {
   const { userId } = req.user;
   const { products, recipientInformation, totalPrice } = req.body;
@@ -40,6 +47,8 @@ router.post("/", authMiddleware, async (req, res) => {
       recipientInformation,
       totalPrice,
       userId,
+      createdAt: new Date(),
+      orderNumber: generateRandomNumber(),
     };
 
     await Order.create(dataInsert);
