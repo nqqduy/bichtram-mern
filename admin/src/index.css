@@ -332,7 +332,9 @@ table th {
 /* table tr:hover {
     background-color: #ddd;
 } */
-
+.cursor-pointer {
+  cursor: pointer;
+}
 table th {
   padding-top: 12px;
   padding-bottom: 12px;

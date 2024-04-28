@@ -12,10 +12,12 @@ const orderSchema = new mongoose.Schema({
       productPrice: Number,
     },
   ],
+  recipientInformation: { type: Object },
   totalPrice: {
     type: Number,
     required: false,
   },
+
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
@@ -23,4 +25,4 @@ const orderSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("Order", orderSchema);
+module.exports = mongoose.model("orders", orderSchema);

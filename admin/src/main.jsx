@@ -10,14 +10,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
     <ConfigProvider
       theme={{
-        token: {
-          // Seed Token
-          colorPrimary: "#00b96b",
-          borderRadius: 2,
-
-          // Alias Token
-          colorBgContainer: "#f6ffed",
-        },
         components: {
           Table: {
             headerBg: "",

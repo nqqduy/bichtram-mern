@@ -41,7 +41,7 @@ const productSchema = new mongoose.Schema({
       maxlength: 2000,
     },
   ],
-  tabData: {
+  tab_data: {
     type: Object,
   },
 });

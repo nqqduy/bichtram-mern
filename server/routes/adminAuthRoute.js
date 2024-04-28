@@ -16,7 +16,7 @@ router.post("/signin", async (req, res) => {
     const token = jwt.sign(
       { userId: user._id, email: user.email },
       "shineaura",
-      { expiresIn: "1h" }
+      { expiresIn: "365d" }
     );
     res.json({
       jwtToken: token,

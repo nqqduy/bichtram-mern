@@ -1,9 +1,9 @@
-const express = require('express');
-const User = require('../models/User');
-const jwt = require('jsonwebtoken');
+const express = require("express");
+const User = require("../models/User");
+const jwt = require("jsonwebtoken");
 const router = express.Router();
 
-router.post('/signin', async (req, res) => {
+router.post("/signin", async (req, res) => {
   const { email, password } = req.body;
 
   try {
@@ -12,18 +12,20 @@ router.post('/signin', async (req, res) => {
 
     // If user is not found, return a user not found error
     if (!user) {
-      return res.status(404).json({ message: 'Email not found' });
+      return res.status(404).json({ message: "Email not found" });
     }
 
     // If the password does not match, return an incorrect password error
     if (user.password !== password) {
-      return res.status(401).json({ message: 'Incorrect password' });
+      return res.status(401).json({ message: "Incorrect password" });
     }
 
     // Generate a token with the user's ID
-    const token = jwt.sign({ userId: user._id, email: user.email , password: user.password},
-      'shineaura',
-      { expiresIn: '1h' });
+    const token = jwt.sign(
+      { userId: user._id, email: user.email, password: user.password },
+      "shineaura",
+      { expiresIn: "365d" }
+    );
 
     // Send the token in the response
     res.json({ token });
@@ -31,12 +33,14 @@ router.post('/signin', async (req, res) => {
     console.error(error);
 
     // Handle different types of errors
-    if (error.name === 'ValidationError') {
+    if (error.name === "ValidationError") {
       // MongoDB validation error
-      return res.status(400).json({ message: 'Validation error', details: error.message });
+      return res
+        .status(400)
+        .json({ message: "Validation error", details: error.message });
     } else {
       // Server error
-      return res.status(500).json({ message: 'Internal server error' });
+      return res.status(500).json({ message: "Internal server error" });
     }
   }
 });

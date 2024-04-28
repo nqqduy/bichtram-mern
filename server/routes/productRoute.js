@@ -4,7 +4,20 @@ const Product = require("../models/Product");
 
 router.get("/products", async (req, res) => {
   try {
-    const products = await Product.find({});
+    const { q, sortBy } = req.query;
+    const filter = {};
+    const sort = {};
+
+    if (q) {
+      const regexPattern = new RegExp(`.*${q}.*`, "i");
+      filter.product_name = { $regex: regexPattern };
+    }
+    if (sortBy) {
+      const [field, value] = sortBy.split(":");
+      sort[field] = Number(value);
+    }
+
+    const products = await Product.find(filter).sort(sort);
     res.json(products);
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });

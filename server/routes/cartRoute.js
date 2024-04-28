@@ -6,7 +6,6 @@ const authMiddleware = require("../middleware/auth");
 
 router.get("/", authMiddleware, async (req, res) => {
   const { userId } = req.user;
-  console.log("go here");
   try {
     const cart = await CartModel.findOne({ userId });
     if (!cart) {

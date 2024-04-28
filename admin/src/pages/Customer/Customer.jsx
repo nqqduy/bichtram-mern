@@ -1,86 +1,122 @@
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useEffect, useState } from "react";
-import { BiPlusCircle } from "react-icons/bi";
-import { GrCaretNext, GrCaretPrevious } from "react-icons/gr";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import Wrapper from "../../assets/styles/management";
-import { Button, Loading } from "../../components";
-// import { PopupCategory, SearchProCate } from "./components";
 import { Space, Table, Tag } from "antd";
-const { Column, ColumnGroup } = Table;
+import { deleteUser, getAllCustomer } from "../../app/customer/customerSlice";
 
-const columns = [
-  {
-    title: "No.",
-    dataIndex: "No",
-    width: "10%",
-  },
-  {
-    title: "Name",
-    dataIndex: "name",
-    // render: (name) => `${name.first} ${name.last}`,
-    width: "20%",
-  },
-  {
-    title: "Type",
-    dataIndex: "type",
-    // filters: [
-    //   { text: "Male", value: "male" },
-    //   { text: "Female", value: "female" },
-    // ],
-    width: "20%",
-  },
-  {
-    title: "Brands",
-    dataIndex: "Brands",
-  },
-  {
-    title: "Created On",
-    data: "createdAt",
-    sorter: true,
-  },
-];
 const Customer = () => {
-  const [data, setData] = useState();
+  const columns = [
+    {
+      title: "No.",
+      dataIndex: "No",
+      width: "10%",
+      align: "center",
+    },
+    {
+      title: "Full name",
+      dataIndex: "fullName",
+      width: "40%",
+      align: "center",
+    },
+    {
+      title: "email",
+      dataIndex: "email",
+      width: "40%",
+      align: "center",
+    },
+    {
+      title: "Action",
+      dataIndex: "_id",
+      width: "10%",
+      render: (_, { _id }) => {
+        return (
+          <Tag
+            color={"red"}
+            onClick={() => handleDeleteUser(_id)}
+            className="cursor-pointer"
+          >
+            DELETE
+          </Tag>
+        );
+      },
+      align: "center",
+    },
+  ];
+
+  const listCustomer = useSelector((state) => state.customer.listCustomer);
   const [tableParams, setTableParams] = useState({
     pagination: {
       current: 1,
-      pageSize: 10,
+      pageSize: 5,
     },
   });
-  const getRandomuserParams = (params) => ({
-    results: params.pagination?.pageSize,
-    page: params.pagination?.current,
-    ...params,
-  });
-  //  useEffect(() => {
-  //     fetchData();
-  //   }, [tableParams.pagination?.current, tableParams.pagination?.pageSize]);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const fetchCustomer = async () => {
+      try {
+        const actionResult = await dispatch(getAllCustomer());
+        unwrapResult(actionResult);
+      } catch (error) {
+        Swal.fire({
+          icon: "warning",
+          title: error.message,
+          showConfirmButton: true,
+        });
+      }
+    };
+    fetchCustomer();
+  }, [
+    dispatch,
+    tableParams.pagination?.current,
+    tableParams.pagination?.pageSize,
+  ]);
+
+  function handleDeleteUser(_id) {
+    Swal.fire({
+      title: "Do you want to delete this customer?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "OK",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const resultDeleteUser = await dispatch(deleteUser(_id));
+          unwrapResult(resultDeleteUser);
+          const resultGetAllCustomer = await dispatch(getAllCustomer());
+          unwrapResult(resultGetAllCustomer);
+        } catch (error) {
+          Swal.fire({
+            icon: "warning",
+            title: error.message,
+            showConfirmButton: true,
+          });
+        }
+      }
+    });
+  }
+
   const handleTableChange = (pagination, filters, sorter) => {
     setTableParams({
       pagination,
       filters,
       ...sorter,
     });
-
-    // `dataSource` is useless since `pageSize` changed
-    if (pagination.pageSize !== tableParams.pagination?.pageSize) {
-      setData([]);
-    }
   };
 
   return (
     <Wrapper>
       <h4>Customer Management</h4>
       <hr />
-
       <Table
         columns={columns}
-        rowKey={(record) => record.login.uuid}
-        dataSource={data}
+        rowKey={(record) => record._id}
+        dataSource={listCustomer}
         pagination={tableParams.pagination}
-        // loading={loading}
         onChange={handleTableChange}
       />
     </Wrapper>

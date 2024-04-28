@@ -1,6 +1,10 @@
 import styled from "styled-components";
 
 const Wrapper = styled.section`
+  .form-center-product-container {
+    height: 70vh;
+    overflow-y: auto;
+  }
   p {
     margin-bottom: 0px;
   }

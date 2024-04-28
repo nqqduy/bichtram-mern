@@ -1,7 +1,7 @@
 import axios from "axios";
 import queryString from "query-string";
 
-const URL = process.env.REACT_APP_SERVER_URL;
+const URL = import.meta.env.VITE_SERVER_URL;
 
 const axiosClient = axios.create({
   baseURL: `${URL}`,
@@ -16,9 +16,8 @@ axiosClient.interceptors.request.use(
   (config) => {
     if (localStorage.getItem("token")) {
       const token = localStorage.getItem("token");
-      config.headers.common["Authorization"] = `Bearer ${token}`;
+      config.headers["Authorization"] = `Bearer ${token}`;
     }
-
     return config;
   },
   (error) => {

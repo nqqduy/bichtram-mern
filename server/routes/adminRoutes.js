@@ -17,13 +17,13 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const body = {
-      productUrl: req.body?.productUrl ?? null,
       price: req.body.price,
       product_type: req.body.product_type,
       brands: req.body.brands,
       product_name: req.body.product_name,
+      images: req.body.images,
       variants: req.body.variants,
-      tabData: req.body.tabData,
+      tab_data: req.body.tab_data,
     };
 
     const newProduct = new Product(body);

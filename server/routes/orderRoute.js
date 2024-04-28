@@ -3,6 +3,7 @@ const router = express.Router();
 const authMiddleware = require("../middleware/auth");
 const Product = require("../models/Product");
 const Order = require("../models/Order");
+const Cart = require("../models/cart");
 const { default: mongoose } = require("mongoose");
 
 // BASE URL : Order
@@ -10,7 +11,7 @@ const { default: mongoose } = require("mongoose");
 //header : token
 router.post("/", authMiddleware, async (req, res) => {
   const { userId } = req.user;
-  const { products } = req.body;
+  const { products, recipientInformation, totalPrice } = req.body;
 
   try {
     if (!products) {
@@ -30,25 +31,25 @@ router.post("/", authMiddleware, async (req, res) => {
         .json({ success: false, message: "Some products not found" });
     }
 
-    const totalPrice = products.reduce(
-      (acc, product) => acc + product.productPrice * product.quantity,
-      0
-    );
-
-    const orderCreated = await Order.create({
-      products: products.map((product) => ({
-        id: product.productId,
-        quantity: product.quantity,
-        productPrice: product.productPrice,
+    const dataInsert = {
+      products: products.map((item) => ({
+        id: item.productId,
+        quantity: item.quantity,
+        productPrice: item.productPrice,
       })),
+      recipientInformation,
       totalPrice,
-      userId: userId,
+      userId,
+    };
+
+    await Order.create(dataInsert);
+    await Cart.findOneAndDelete({
+      userId,
     });
 
     res.json({
       success: true,
       message: "Order created successfully",
-      order: orderCreated,
     });
   } catch (error) {
     console.error(error);

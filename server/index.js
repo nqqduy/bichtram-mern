@@ -12,6 +12,9 @@ const resetpassRoute = require("./routes/resetpassRoute");
 const cartRoute = require("./routes/cartRoute");
 const fileRoute = require("./routes/fileRoute");
 const adminAuthRoute = require("./routes/adminAuthRoute");
+const userAdminRoute = require("./routes/admin/user.route");
+const productAdminRoute = require("./routes/admin/product.route");
+const orderAdminRoute = require("./routes/admin/order.route");
 const authenticateToken = require("./middleware/auth");
 const Product = require("./models/Product");
 const adminProduct = require("./routes/adminRoutes");
@@ -52,23 +55,28 @@ app.get("/verification", (req, res) => {
   res.send("Verification route is working!");
 });
 
+// ADMIN
+app.use("/admin/auth", adminAuthRoute);
+app.use("/admin/users", userAdminRoute);
+app.use("/admin/products", productAdminRoute);
+app.use("/admin/orders", orderAdminRoute);
+
 //auth
 app.post("/signup", require("./routes/signupRoute"));
 app.post("/signin", signinRoute);
-app.use("/admin/auth", adminAuthRoute);
 //user
-app.get("/users", authenticateToken, userRoute);
+app.use("/users", authenticateToken, userRoute);
 app.post("/forgot-password", forgotRoute);
 app.put("/", authenticateToken, changepassRoute);
 app.delete("/users", authenticateToken, userRoute);
 
 //product
 app.use("/product", productRoute);
-app.use("/products", adminProduct);
+// app.use("/products", adminProduct);
 
 //order
 app.use("/order", require("./routes/orderRoute"));
-app.use("/admin/order", require("./routes/admin.orderRoute"));
+// app.use("/admin/order", require("./routes/admin.orderRoute"));
 //
 app.use("/", sendtokenRoute);
 app.use("/", resetpassRoute);
@@ -80,7 +88,9 @@ app.use("/cart", cartRoute);
 app.use("/file", fileRoute);
 
 // databaseProject.run();
-
+app.use((req, res, next, err) => {
+  res.status(500).json({ message: "Something went wrong" });
+});
 const connectDb = async () => {
   try {
     await mongoose.connect(url, {
